@@ -1,0 +1,24 @@
+Ref,Part,Value/spec,Package,Qty,Unit USD (est.),Already own,Example part / source,Notes
+U1,Microcontroller,ATtiny13A (1.8-5.5 V),DIP-8,1,1.0,yes,ATtiny13A-PU,Check marking: plain ATtiny13 needs >=2.7 V
+XU1,IC socket,8-pin DIP,DIP-8,1,0.03,,Generic turned-pin,Program chips off-board
+PV1,Solar panel,"5 V 60 mA (0.3 W), ~68x37 mm",Wire leads,1,1.5,,Generic epoxy mini panel,Biggest cost; US retail ~$1.90-3.60 each
+SC1,Supercapacitor,1 F 5.5 V coin-stack,Radial 5 mm,1,0.95,,NIC NDLC105Z5.5V19.2X4.8VF / Eaton KR-5R5V105-R,ESR 15-30 ohm
+D1,Schottky diode,BAT46 low leakage,DO-35,1,0.03,,BAT46 or BAT85,Avoid 1N5817 (leaky)
+D2,Zener clamp,5.6 V 1 W,DO-41,1,0.03,,1N4734A,Panel side of D1; cap tops out ~5.3 V
+LED1,LED flash+sense,5 mm red water-clear high-brightness,5 mm TH,1,0.03,,Generic 620-630 nm,Works from ~1.8 V
+R1,Resistor,150 ohm,Axial 1/4 W,1,0.01,,Metal film 1%,LED current
+R2,Resistor,100k,Axial 1/4 W,1,0.01,,Metal film 1%,Panel divider top
+R3,Resistor,22k,Axial 1/4 W,1,0.01,,Metal film 1%,Panel divider bottom
+R4,Resistor,3.9M,Axial 1/4 W,1,0.01,,Metal film 1%,Cap divider top (~1 uA)
+R5,Resistor,1M,Axial 1/4 W,1,0.01,,Metal film 1%,Cap divider bottom
+R6,Resistor,10k,Axial 1/4 W,1,0.01,,Metal film 1%,Reset pull-up
+C1,Capacitor,100 nF ceramic,Radial 2.54 mm,1,0.02,,MLCC X7R 50 V,Decoupling at U1
+C2,Capacitor,10 uF ceramic,Radial 5 mm,1,0.06,,MLCC X5R 10 V,LED pulse buffer
+"C3,C4",Capacitor,100 nF ceramic,Radial 2.54 mm,2,0.02,,MLCC X7R 50 V,"ADC filter on PB2, PB3"
+SW1,Vibration switch (optional),"Spring, normally open",TH,1,0.05,,SW-18010P,PB4 to GND
+TP1-6,ISP pads (optional),2x3 2.54 mm,Pads,1,0.0,,-,Pogo-pin programming
+J1,Panel connection,2 pads 2.54 mm,Pads,1,0.0,,-,Solder panel wires
+PCB,Circuit board,2-layer ~35x35 mm 1.6 mm,-,1,0.4,,JLCPCB / PCBWay panelized,Shipping dominates small orders
+ENC,Enclosure,PETG or ASA ~15 g,3D print,1,0.3,,Home printed,Not PLA outdoors
+COAT,Weather protection,Conformal coating,-,1,0.05,,Acrylic coat / clear nail polish,Mask LED and socket
+WIRE,Hookup wire,~10 cm 26 AWG,-,1,0.02,,Generic,Panel to J1

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solar Firefly Schematic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a calm engineering datasheet, exact and dense, no flourish
+   IDEA: the first page of a component datasheet: title strip, schematic plate, pin table, numbers
+   PICTURE: the full hand-drawn schematic, VCAP rail picked out in cobalt
+   COLOUR and TYPE: cobalt strip, white page, black ink, pale blue zones; Space Grotesk + Inter
+   LAYOUT: title strip, schematic plate full width, then a grid of exact panels */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0a0d18);--ink:light-dark(#0b0b0f,#e8ecf8);--mute:light-dark(#4a5068,#9aa3bf);--zone:light-dark(#eef2ff,#121a33);--line:light-dark(#d5dcf5,#24305a);--acc:light-dark(#1240e0,#6f8fff)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2{font-family:"Space Grotesk",Inter,sans-serif;font-weight:600;margin:0}
+h1{font-size:clamp(28px,4.4vw,44px);line-height:1.05;text-wrap:balance}
+h2{font-size:20px;margin-bottom:10px}
+.strip{background:#1240e0;color:#fff;padding:clamp(22px,3vw,40px) max(5vw,16px)}
+.strip p{margin:10px 0 0;max-width:68ch;color:#dfe6ff}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(20px,3vw,40px) max(5vw,16px)}
+figure{margin:0;background:var(--zone);border:1px solid var(--line);border-radius:6px;padding:14px}
+figure svg{display:block;width:100%;height:auto;color:var(--ink)}
+figcaption{font-size:14px;color:var(--mute);margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px}
+.panel{border:1px solid var(--line);border-radius:6px;padding:18px}
+.panel p,.panel li{font-size:15px}.panel ul{padding-left:18px;margin:0}.panel li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;background:var(--zone)}
+.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:12px}
+.kpi{background:var(--zone);border-radius:6px;padding:10px 12px}
+.kpi b{display:block;font:600 24px/1.1 "Space Grotesk",sans-serif;color:var(--acc);white-space:nowrap}
+.kpi span{font-size:13px;color:var(--mute)}
+a{color:var(--acc)}
+.small{font-size:13px;color:var(--mute)}
+pre,.scroll{overflow-x:auto}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute)}.stack td:empty{display:none}}
+</style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
+
+<header class="strip"><div class="wrap">
+<h1>Solar firefly board: schematic, rev 0.1</h1>
+<p>An all through-hole ATtiny13A board. A 5 V panel charges a 1 F supercap, and one red LED both flashes and senses its neighbours. About 20 parts, no battery and no charging IC.</p>
+</div></header>
+
+<section class="band"><div class="wrap">
+<figure>
+<svg viewBox="0 0 860 570" role="img" aria-label="Schematic: solar panel with zener clamp and Schottky diode charging a 1 farad supercap; voltage dividers sense panel and cap voltage; ATtiny13A drives a red LED between PB0 and PB1 for flashing and sensing; optional vibration switch on PB4." font-family="Inter,sans-serif" font-size="12" fill="none" stroke="currentColor" stroke-width="1.6">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" stroke="none"/></marker>
+<g id="gnd"><line x1="0" y1="0" x2="0" y2="10"/><line x1="-14" y1="10" x2="14" y2="10"/><line x1="-9" y1="15" x2="9" y2="15"/><line x1="-4" y1="20" x2="4" y2="20"/></g></defs>
+<g fill="currentColor" stroke="none" font-family="Space Grotesk,sans-serif" font-size="14" font-weight="600"><text x="20" y="28">Power and sensing</text><text x="20" y="292">Microcontroller and light I/O</text></g>
+<line x1="20" y1="268" x2="840" y2="268" stroke-dasharray="4 5" opacity=".35"/>
+
+<!-- PV1 -->
+<line x1="80" y1="70" x2="80" y2="128"/><line x1="60" y1="128" x2="100" y2="128"/><line x1="70" y1="136" x2="90" y2="136"/><line x1="60" y1="148" x2="100" y2="148"/><line x1="70" y1="156" x2="90" y2="156"/><line x1="80" y1="156" x2="80" y2="230"/>
+<rect x="50" y="116" width="60" height="52" rx="3" stroke-dasharray="3 3" opacity=".6"/>
+<line x1="18" y1="112" x2="44" y2="128" marker-end="url(#ah)"/><line x1="18" y1="132" x2="44" y2="148" marker-end="url(#ah)"/>
+<g fill="currentColor" stroke="none"><text x="102" y="112">+</text><text x="72" y="190" text-anchor="end">PV1</text><text x="72" y="204" text-anchor="end" fill-opacity=".7">5 V 60 mA</text></g>
+<!-- top rail panel side -->
+<line x1="80" y1="70" x2="395" y2="70"/>
+<!-- D2 zener -->
+<line x1="170" y1="70" x2="170" y2="140"/><path d="M154,136 L158,140 L182,140 L186,144"/><polygon points="158,162 182,162 170,140"/><line x1="170" y1="162" x2="170" y2="230"/>
+<g fill="currentColor" stroke="none"><text x="190" y="148">D2</text><text x="190" y="162" fill-opacity=".7">5.6 V</text></g>
+<!-- R2 R3 panel divider -->
+<line x1="250" y1="70" x2="250" y2="90"/><rect x="242" y="90" width="16" height="40"/><line x1="250" y1="130" x2="250" y2="170"/><rect x="242" y="170" width="16" height="40"/><line x1="250" y1="210" x2="250" y2="230"/>
+<g fill="currentColor" stroke="none"><text x="212" y="108">R2</text><text x="204" y="122" fill-opacity=".7">100k</text><text x="212" y="188">R3</text><text x="210" y="202" fill-opacity=".7">22k</text></g>
+<line x1="250" y1="150" x2="330" y2="150"/><line x1="300" y1="150" x2="300" y2="184"/><line x1="287" y1="184" x2="313" y2="184"/><line x1="287" y1="192" x2="313" y2="192"/><line x1="300" y1="192" x2="300" y2="230"/>
+<g fill="currentColor" stroke="none"><circle cx="250" cy="150" r="3.2"/><circle cx="300" cy="150" r="3.2"/><text x="318" y="194">C3</text><text x="318" y="208" fill-opacity=".7">100n</text></g>
+<path d="M330,140 h80 l10,10 l-10,10 h-80 z"/><text x="337" y="154" fill="currentColor" stroke="none" font-size="11">PANEL_SNS</text>
+<!-- D1 Schottky -->
+<polygon points="395,58 395,82 419,70"/><path d="M415,58 L419,58 L419,82 L423,82"/><line x1="419" y1="70" x2="440" y2="70" stroke="#1240e0"/>
+<g fill="currentColor" stroke="none"><text x="392" y="48">D1 BAT46</text></g>
+<!-- VCAP rail -->
+<g stroke="#1240e0" stroke-width="2.4"><line x1="440" y1="70" x2="800" y2="70"/></g>
+<text x="590" y="58" fill="#1240e0" stroke="none" font-weight="600">VCAP 1.8–5.3 V</text>
+<line x1="800" y1="70" x2="800" y2="46"/><line x1="788" y1="46" x2="812" y2="46"/><text x="788" y="38" fill="currentColor" stroke="none">VCC</text>
+<!-- SC1 -->
+<line x1="500" y1="70" x2="500" y2="140"/><line x1="486" y1="140" x2="514" y2="140" stroke-width="2.4"/><path d="M486,154 Q500,144 514,154" stroke-width="2.4"/><line x1="500" y1="149" x2="500" y2="230"/>
+<g fill="currentColor" stroke="none"><circle cx="500" cy="70" r="3.2"/><text x="476" y="134">+</text><text x="520" y="142">SC1</text><text x="520" y="156" fill-opacity=".7">1 F</text><text x="520" y="170" fill-opacity=".7">5.5 V</text></g>
+<!-- C2 -->
+<line x1="580" y1="70" x2="580" y2="140"/><line x1="567" y1="140" x2="593" y2="140"/><line x1="567" y1="148" x2="593" y2="148"/><line x1="580" y1="148" x2="580" y2="230"/>
+<g fill="currentColor" stroke="none"><circle cx="580" cy="70" r="3.2"/><text x="598" y="142">C2</text><text x="598" y="156" fill-opacity=".7">10µ</text></g>
+<!-- R4 R5 cap divider -->
+<line x1="660" y1="70" x2="660" y2="90"/><rect x="652" y="90" width="16" height="40"/><line x1="660" y1="130" x2="660" y2="170"/><rect x="652" y="170" width="16" height="40"/><line x1="660" y1="210" x2="660" y2="230"/>
+<g fill="currentColor" stroke="none"><circle cx="660" cy="70" r="3.2"/><text x="624" y="108">R4</text><text x="622" y="122" fill-opacity=".7">3.9M</text><text x="624" y="188">R5</text><text x="626" y="202" fill-opacity=".7">1M</text></g>
+<line x1="660" y1="150" x2="730" y2="150"/><line x1="705" y1="150" x2="705" y2="184"/><line x1="692" y1="184" x2="718" y2="184"/><line x1="692" y1="192" x2="718" y2="192"/><line x1="705" y1="192" x2="705" y2="230"/>
+<g fill="currentColor" stroke="none"><circle cx="660" cy="150" r="3.2"/><circle cx="705" cy="150" r="3.2"/><text x="722" y="200">C4 100n</text></g>
+<path d="M730,140 h76 l10,10 l-10,10 h-76 z"/><text x="738" y="154" fill="currentColor" stroke="none" font-size="11">CAP_SNS</text>
+<!-- GND rail -->
+<line x1="80" y1="230" x2="705" y2="230"/>
+<g fill="currentColor" stroke="none"><circle cx="170" cy="230" r="3.2"/><circle cx="250" cy="230" r="3.2"/><circle cx="300" cy="230" r="3.2"/><circle cx="500" cy="230" r="3.2"/><circle cx="580" cy="230" r="3.2"/><circle cx="660" cy="230" r="3.2"/></g>
+<use href="#gnd" x="80" y="230"/>
+
+<!-- U1 -->
+<rect x="370" y="340" width="160" height="160" rx="3"/>
+<text x="370" y="330" fill="currentColor" stroke="none" font-weight="600">U1 ATtiny13A (DIP-8)</text>
+<g fill="currentColor" stroke="none" font-size="11">
+<text x="378" y="364">1 PB5/RST</text><text x="378" y="404">2 PB3/ADC3</text><text x="378" y="444">3 PB4</text><text x="378" y="484">4 GND</text>
+<text x="522" y="364" text-anchor="end">VCC 8</text><text x="522" y="404" text-anchor="end">PB2/ADC1 7</text><text x="522" y="444" text-anchor="end">PB1 6</text><text x="522" y="484" text-anchor="end">PB0 5</text></g>
+<!-- left side -->
+<line x1="370" y1="360" x2="270" y2="360"/><line x1="270" y1="360" x2="270" y2="345"/><rect x="262" y="305" width="16" height="40"/><line x1="270" y1="305" x2="270" y2="296"/><line x1="258" y1="296" x2="282" y2="296"/>
+<g fill="currentColor" stroke="none"><text x="220" y="322">R6</text><text x="220" y="336" fill-opacity=".7">10k</text><text x="286" y="300">VCC</text></g>
+<line x1="370" y1="400" x2="300" y2="400"/><path d="M300,390 h-80 l-10,10 l10,10 h80 z"/><text x="226" y="404" fill="currentColor" stroke="none" font-size="11">CAP_SNS</text>
+<line x1="370" y1="440" x2="230" y2="440"/><line x1="230" y1="440" x2="230" y2="480"/><circle cx="230" cy="484" r="3.5"/><line x1="232" y1="487" x2="248" y2="510"/><circle cx="230" cy="514" r="3.5"/><line x1="230" y1="518" x2="230" y2="535"/><use href="#gnd" x="230" y="535"/>
+<g fill="currentColor" stroke="none"><text x="160" y="494">SW1 tilt/</text><text x="160" y="508">vibration</text><text x="160" y="522" fill-opacity=".7">optional</text></g>
+<line x1="370" y1="480" x2="320" y2="480"/><line x1="320" y1="480" x2="320" y2="535"/><use href="#gnd" x="320" y="535"/>
+<!-- right side -->
+<line x1="530" y1="360" x2="780" y2="360"/><line x1="780" y1="360" x2="780" y2="330"/><line x1="768" y1="330" x2="792" y2="330"/><text x="768" y="322" fill="currentColor" stroke="none">VCC</text>
+<line x1="780" y1="360" x2="780" y2="420"/><line x1="767" y1="420" x2="793" y2="420"/><line x1="767" y1="428" x2="793" y2="428"/><line x1="780" y1="428" x2="780" y2="535"/><use href="#gnd" x="780" y="535"/>
+<g fill="currentColor" stroke="none"><circle cx="780" cy="360" r="3.2"/><text x="798" y="422">C1</text><text x="798" y="436" fill-opacity=".7">100n</text></g>
+<line x1="530" y1="400" x2="580" y2="400"/><path d="M580,390 h80 l10,10 l-10,10 h-80 z"/><text x="587" y="404" fill="currentColor" stroke="none" font-size="11">PANEL_SNS</text>
+<line x1="530" y1="440" x2="700" y2="440"/><line x1="700" y1="440" x2="700" y2="452"/>
+<line x1="688" y1="452" x2="712" y2="452"/><polygon points="688,470 712,470 700,452"/><line x1="700" y1="470" x2="700" y2="480"/>
+<line x1="716" y1="462" x2="740" y2="446" marker-end="url(#ah)"/><line x1="748" y1="494" x2="718" y2="474" marker-end="url(#ah)"/>
+<line x1="530" y1="480" x2="590" y2="480"/><rect x="590" y="472" width="40" height="16"/><line x1="630" y1="480" x2="700" y2="480"/>
+<g fill="currentColor" stroke="none"><text x="594" y="466">R1 150Ω</text><text x="728" y="510">LED1 red</text><text x="728" y="524" fill-opacity=".7">flash + sense</text></g>
+</svg>
+<figcaption>The panel charges SC1 through D1, and D2 clamps the panel so the cap tops out near 5.3 V. Net flags (PANEL_SNS, CAP_SNS) join the dividers to the ADC pins. LED1 sits between PB0 and PB1, so the firmware can drive it forward to flash or reverse-bias it to sense light.</figcaption>
+</figure>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap grid">
+<div class="panel">
+<h2>Pin map</h2>
+<table class="stack"><thead><tr><th>Pin</th><th>Port</th><th>Job</th></tr></thead><tbody>
+<tr><td>1</td><td>PB5 / RESET</td><td>10k pull-up; kept as reset so ISP still works</td></tr>
+<tr><td>2</td><td>PB3 / ADC3</td><td>Cap voltage via 3.9M/1M, for low-energy shutdown</td></tr>
+<tr><td>3</td><td>PB4</td><td>Optional tilt switch to GND, pin-change wake</td></tr>
+<tr><td>4</td><td>GND</td><td>Ground</td></tr>
+<tr><td>5</td><td>PB0</td><td>LED anode through R1</td></tr>
+<tr><td>6</td><td>PB1</td><td>LED cathode; floats as the sense input</td></tr>
+<tr><td>7</td><td>PB2 / ADC1</td><td>Panel voltage via 100k/22k, for dusk and dawn</td></tr>
+<tr><td>8</td><td>VCC</td><td>VCAP rail, 100n right at the pin</td></tr>
+</tbody></table>
+</div>
+
+<div class="panel">
+<h2>Energy budget</h2>
+<div class="kpis">
+<div class="kpi"><b>≈12 J</b><span>usable, 5.3 → 1.8 V on 1 F</span></div>
+<div class="kpi"><b>≈1.5 min</b><span>to fill in full sun</span></div>
+<div class="kpi"><b>≈12 h</b><span>flashing every 3 s</span></div>
+<div class="kpi"><b>≈4 days</b><span>asleep, no flashing</span></div>
+</div>
+<p class="small">Assumptions: about 8 µA asleep (watchdog, cap divider, supercap leakage), and 20 ms flashes at about 10 mA. Coin supercaps run −20% on capacitance, so treat these as upper bounds and check them on the bench.</p>
+</div>
+
+<div class="panel">
+<h2>Why the parts are where they are</h2>
+<ul>
+<li><b>D2 sits on the panel side</b>, so its knee leakage only costs panel current and never drains the cap at night.</li>
+<li><b>BAT46 for D1</b>: it leaks far less in reverse than a 1N5817, which matters over a 12-hour night.</li>
+<li><b>The panel divider draws nothing in the dark</b>, because D1 isolates it from the cap. The cap divider costs about 1 µA all the time.</li>
+<li><b>C2 and C1</b> supply the LED pulse current, because the supercap's 15–30 Ω ESR would sag the rail by about 0.3 V.</li>
+<li><b>C3 and C4</b> hold the high-impedance dividers steady while the ADC samples.</li>
+</ul>
+</div>
+
+<div class="panel">
+<h2>Before layout</h2>
+<ul>
+<li>Check the chip marking. A plain ATtiny13 (not A or V) needs at least 2.7 V.</li>
+<li>Fuses: 128 kHz or 1.2 MHz clock, BOD at 1.8 V, disabled during sleep in firmware (the 13A supports this).</li>
+<li>Socket U1 and program the chips off-board. The LED between MOSI and MISO can upset in-circuit programming.</li>
+<li>The internal 1.1 V reference is only accurate to ±10%, so calibrate thresholds per board or leave margin.</li>
+<li>Keep the LED at the board edge facing out, and put the panel on the lid with a drain hole below.</li>
+</ul>
+</div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+<p class="small">Parts, prices and quantities are in the companion sheet: <a href="https://claude.ai/artifact/KdpUDL5fSMvseTqnprzzTU">Solar Firefly Board BOM</a>. This is a draft schematic and has not been simulated or built yet.</p>
+</div></section>
+</body></html>
