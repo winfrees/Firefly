@@ -1262,13 +1262,13 @@
     (dnp no)
     (uuid "e41ab0e7-85d7-534e-ba88-66cbf6d1784c")
     (property "Reference" "D2"
-      (at 58.42 62.23 90)
+      (at 59.69 62.23 90)
       (effects
         (font
           (size 1.27 1.27))
         (justify left)))
     (property "Value" "1N4734A 5.6V"
-      (at 58.42 64.77 90)
+      (at 59.69 64.77 90)
       (effects
         (font
           (size 1.27 1.27))
@@ -1617,31 +1617,29 @@
     (uuid "c62cff23-0f42-55f3-b4d7-c87cc05871a6"))
   (symbol
     (lib_id "power:VCC")
-    (at 110.49 45.72 90)
+    (at 110.49 45.72 0)
     (unit 1)
     (in_bom no)
     (on_board no)
     (dnp no)
     (uuid "703f2528-8b96-523d-a629-c5e0c72a68b1")
     (property "Reference" "#PWR05"
-      (at 113.03 44.45 90)
+      (at 110.49 49.53 0)
       (effects
         (font
-          (size 1.27 1.27))
-        (justify left) hide))
+          (size 1.27 1.27)) hide))
     (property "Value" "VCC"
-      (at 113.03 46.99 90)
+      (at 110.49 41.91 0)
       (effects
         (font
-          (size 1.27 1.27))
-        (justify left)))
+          (size 1.27 1.27))))
     (property "Footprint" ""
-      (at 110.49 45.72 90)
+      (at 110.49 45.72 0)
       (effects
         (font
           (size 1.27 1.27)) hide))
     (property "Datasheet" ""
-      (at 110.49 45.72 90)
+      (at 110.49 45.72 0)
       (effects
         (font
           (size 1.27 1.27)) hide))
@@ -2737,13 +2735,13 @@
     (dnp no)
     (uuid "f04b966a-73dc-55e3-9811-c71707767f3a")
     (property "Reference" "SW1"
-      (at 71.12 140.97 90)
+      (at 72.39 140.97 90)
       (effects
         (font
           (size 1.27 1.27))
         (justify left)))
     (property "Value" "Vibration switch (opt.)"
-      (at 71.12 143.51 90)
+      (at 72.39 143.51 90)
       (effects
         (font
           (size 1.27 1.27))

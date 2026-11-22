@@ -1,8 +1,32 @@
 """Single source of truth for the Firefly rev 0.1 board.
 
+Build with the scripts in tools/kicadgen (see tools/kicadgen/README.md).
+
 Both the schematic and the PCB are generated from this file, so they
 always share the same parts, footprints and nets.
 """
+
+PROJECT = "firefly"
+ROOT_UUID = "4b1d2f0e-6a1c-4c55-9d1e-0f1a2b3c4d5e"
+TITLE = "Firefly solar light board"
+DATE = "2026-11-22"
+REV = "0.1"
+COMMENT = "ATtiny13A, 1 F supercap, LED flash + sense"
+CUSTOM_LIBS = {"firefly": "firefly.pretty"}
+
+NOTES = [  # schematic text: (text, x, y, size)
+    ("Firefly rev 0.1: solar-powered light-talking board", 25.4, 25.4, 2.5),
+    ("Power and sensing: panel -> BAT46 -> 1 F supercap. D2 clamps the panel side so VCC tops out near 5.3 V.", 25.4, 33.02, 1.5),
+    ("PANEL_SNS reads dusk/dawn (no drain at night). CAP_SNS (~1 uA) lets firmware sleep before brown-out.", 25.4, 38.1, 1.5),
+    ("Microcontroller and light I/O: LED1 sits between PB0 and PB1. Drive it forward to flash;", 25.4, 88.9, 1.5),
+    ("reverse-bias it and time the discharge on PB1 to sense light. Program U1 off-board (socketed).", 25.4, 93.98, 1.5),
+    ("Fuses: 128 kHz or 1.2 MHz clock, BOD 1.8 V (disable in sleep).", 25.4, 99.06, 1.5),
+]
+SILK = [  # board text: (text, x, y, size, layer)
+    ("FIREFLY rev 0.1", 23.5, 31.0, 1.2, "F.SilkS"),
+    ("PV1: square pad = panel +", 23.5, 33.3, 0.8, "F.SilkS"),
+    ("github.com/winfrees/firefly", 22.5, 33.5, 0.9, "B.SilkS"),
+]
 
 FP_R = "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 FP_C = "Capacitor_THT:C_Disc_D3.0mm_W2.0mm_P2.50mm"

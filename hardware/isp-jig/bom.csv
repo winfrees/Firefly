@@ -1,0 +1,17 @@
+Ref,Part,Value/spec,Package,Qty,Unit USD (est.),Example part / source,Notes
+J1,USB-B receptacle,"USB-B, right angle",THT,1,0.30,OST USB-B1HSxx or generic,Power only; data lines unused
+F1,Resettable fuse,PTC 0.5 A hold,Radial 5.1 mm,1,0.15,Bourns MF-RHT050 or generic PTC,Protects the USB port from a shorted chip
+J2,Pin header,1x02 2.54 mm,THT,1,0.02,Generic,External 1.8-5.5 V supply input
+JP1,Pin header + shunt,1x03 2.54 mm,THT,1,0.03,Generic + 1 jumper shunt,Power select: 1-2 USB / 2-3 EXT
+J3,Pin header,2x03 2.54 mm,THT,1,0.05,Generic (shrouded box header also fits),AVRISP mkII cable; red stripe to the square pad
+U1,IC socket,8-pin DIP,DIP-8,1,0.03,Turned-pin socket,Holds the ATtiny13A being programmed
+J4,Pin header,1x08 2.54 mm,THT,1,0.05,Generic,All 8 chip pins for scope or breadboard
+JP2,Pin header + shunt,1x02 2.54 mm,THT,1,0.03,Generic + 1 jumper shunt,LED test: fit to try firmware; remove to program
+C1,Capacitor,10 uF ceramic,Radial 5 mm,1,0.06,MLCC X5R 10 V,
+C2,Capacitor,100 nF ceramic,Radial 2.54 mm,1,0.02,MLCC X7R 50 V,Right at U1
+R1,Resistor,1k,Axial 1/4 W,1,0.01,Metal film,Power LED
+R2,Resistor,10k,Axial 1/4 W,1,0.01,Metal film,RESET pull-up
+R3,Resistor,150,Axial 1/4 W,1,0.01,Metal film,Same as firefly R1
+D1,LED,Green 3 mm,THT,1,0.02,Generic,Target power on
+D2,LED,Red 5 mm water-clear,THT,1,0.03,Generic,Same as firefly LED1
+PCB,Circuit board,2-layer 55x44 mm,-,1,0.40,JLCPCB / PCBWay,Order alongside the firefly boards to share shipping

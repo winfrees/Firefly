@@ -57,7 +57,9 @@ About **$3.57 per board** for the parts you buy, or **$4.57** if you also buy th
 | `hardware/images/` | Board renders and schematic images |
 | `hardware/schematic.html` | Annotated schematic page with the pin map, energy budget and layout notes |
 | `hardware/bom.csv` | Bill of materials |
-| `hardware/kicad/scripts/` | Python scripts that generated the schematic and board from `design.py` |
+| `hardware/kicad/design.py` | The part, net and placement list both the schematic and board are generated from |
+| `hardware/isp-jig/` | Programming and power jig for the AVRISP mkII (KiCad project, Gerbers, BOM, how-to) |
+| `tools/kicadgen/` | Scripts that turn a `design.py` into a KiCad schematic and routed board |
 
 ## PCB
 
@@ -72,11 +74,11 @@ About **$3.57 per board** for the parts you buy, or **$4.57** if you also buy th
 
 Opening it in KiCad: open `hardware/kicad/firefly.kicad_pro`. The footprints use KiCad's stock libraries, plus `firefly.pretty` for the supercap, which the project's `fp-lib-table` points to. The files were made with KiCad 7 and also open in KiCad 8 and 9.
 
-Regenerating it: edit `scripts/design.py`, then run `make_sch.py`, `make_pcb.py`, `route.py` (needs the Freerouting 1.9 jar in `FREEROUTING_JAR`) and `finish.py` with the Python that ships with KiCad.
+Regenerating it: edit `hardware/kicad/design.py` and run the pipeline in [`tools/kicadgen`](tools/kicadgen/README.md).
 
 ## Assembly notes
 
-- U1 is socketed and there is no ISP header, so program the chips off-board (breadboard, DIP clip or ZIF adapter). The LED sits between MOSI and MISO and C3 loads SCK, so in-circuit programming would be unreliable anyway.
+- U1 is socketed and there is no ISP header, so program the chips on the [ISP jig](hardware/isp-jig/README.md) with an AVRISP mkII, then move them to the board. The LED sits between MOSI and MISO and C3 loads SCK, so in-circuit programming would be unreliable anyway.
 - Fuses: 128 kHz or 1.2 MHz clock, BOD at 1.8 V, with BOD disabled during sleep in firmware.
 - The internal 1.1 V reference is only accurate to ±10%, so calibrate ADC thresholds per board or leave margin.
 - Outdoors: use a PETG or ASA case (not PLA), conformal-coat the board, and leave a drain hole under the panel.
@@ -84,6 +86,7 @@ Regenerating it: edit `scripts/design.py`, then run `make_sch.py`, `make_pcb.py`
 ## Roadmap
 
 - [x] KiCad schematic and PCB (50 × 36 mm)
+- [x] ISP programming and power jig for the AVRISP mkII
 - [ ] Firefly sync firmware (MicroCore / avr-gcc)
 - [ ] Enclosure STL
 - [ ] Bench test of the energy budget

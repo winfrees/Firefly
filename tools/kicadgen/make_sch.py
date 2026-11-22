@@ -1,15 +1,18 @@
-"""Generate firefly.kicad_sch from design.py using KiCad's stock symbols."""
+"""Generate <project>.kicad_sch from a design.py using KiCad's stock symbols.
+
+Usage: python3 make_sch.py path/to/design.py
+"""
 import math
 import sys
 import uuid
 from copy import deepcopy
 
 from sexp import Sym, parse, dump, find, first
-from design import PARTS, POWER_NETS, SCH_WIRES, SCH_LABELS, SCH_JUNCTIONS
+from designload import load
 
 SYMDIR = "/usr/share/kicad/symbols/"
-PROJECT = "firefly"
-ROOT = "4b1d2f0e-6a1c-4c55-9d1e-0f1a2b3c4d5e"
+PROJECT = None
+ROOT = None
 _ns = uuid.UUID("5a0c7f2e-1111-4222-8333-944455556666")
 _count = [0]
 
@@ -114,8 +117,8 @@ def instance(lib_id, ref, val, fp, at, pins, sym_def, place_text=True):
             just = " ".join(str(x) for x in first(first(p, "effects"), "justify")[1:])
         if r in (90, 270) and name in ("Reference", "Value"):
             just = "left"
-            return (X + 2.54, Y + (-1.27 if name == "Reference" else 1.27), just)
-        if lib_id in ("Device:R",) and name in ("Reference", "Value"):
+            return (X + 3.81, Y + (-1.27 if name == "Reference" else 1.27), just)
+        if lib_id in ("Device:R", "Device:Polyfuse") and name in ("Reference", "Value"):
             return (X + 2.54, Y + (-1.27 if name == "Reference" else 1.27), "left")
         if r == 180 and name in ("Reference", "Value"):
             return (X, Y + (-3.81 if name == "Reference" else 3.81), None)
@@ -151,7 +154,11 @@ def text(s, x, y, size=1.5):
     return ["text", s, ["at", x, y, 0], eff(size=size, justify="left bottom"), ["uuid", uid("t")]]
 
 
-def main(out):
+def main(D):
+    global PROJECT, ROOT
+    PROJECT, ROOT = D.PROJECT, D.ROOT_UUID
+    PARTS, POWER_NETS = D.PARTS, D.POWER_NETS
+    out = D.SCH
     lib_ids = sorted({p["lib"] for p in PARTS} | {"power:VCC", "power:GND"})
     defs = {lid: lib_symbol(lid) for lid in lib_ids}
     items = []
@@ -165,6 +172,9 @@ def main(out):
             if num in p.get("skip", ()):
                 continue
             x, y, d = pin_pos(p["sch"], pins[num])
+            if net == "NC":
+                items.append(["no_connect", ["at", x, y], ["uuid", uid("nc")]])
+                continue
             dx, dy = {0: (1, 0), 90: (0, -1), 180: (-1, 0), 270: (0, 1)}[int(d) % 360]
             L = 2.54
             ex, ey = round(x + dx * L, 4), round(y + dy * L, 4)
@@ -173,39 +183,35 @@ def main(out):
                 pwr_n[0] += 1
                 pid = "power:" + net
                 base = 270 if net == "GND" else 90
-                r = int((d - base) % 360)
+                # horizontal stub: keep the power symbol upright; vertical: point it away
+                r = 0 if int(d) % 180 == 0 else int((d - base) % 360)
                 items.append(instance(pid, "#PWR%02d" % pwr_n[0], net, "", (ex, ey, r), {"1": net}, defs[pid]))
             else:
                 items.append(label(net, ex, ey, int(d) % 360))
 
-    for (x1, y1, x2, y2) in SCH_WIRES:
+    for (x1, y1, x2, y2) in D.SCH_WIRES:
         items.append(wire(x1, y1, x2, y2))
-    for (n, x, y, d) in SCH_LABELS:
+    for (net, x, y, r) in getattr(D, "SCH_POWER", []):
+        pwr_n[0] += 1
+        pid = "power:" + net
+        items.append(instance(pid, "#PWR%02d" % pwr_n[0], net, "", (x, y, r), {"1": net}, defs[pid]))
+    for (n, x, y, d) in D.SCH_LABELS:
         items.append(label(n, x, y, d))
-    for (x, y) in SCH_JUNCTIONS:
+    for (x, y) in D.SCH_JUNCTIONS:
         items.append(["junction", ["at", x, y], ["diameter", 0], ["color", 0, 0, 0, 0], ["uuid", uid("j")]])
-    notes = [
-        text("Firefly rev 0.1: solar-powered light-talking board", 25.4, 25.4, 2.5),
-        text("Power and sensing: panel -> BAT46 -> 1 F supercap. D2 clamps the panel side so VCC tops out near 5.3 V.", 25.4, 33.02),
-        text("PANEL_SNS reads dusk/dawn (no drain at night). CAP_SNS (~1 uA) lets firmware sleep before brown-out.", 25.4, 38.1),
-        text("Microcontroller and light I/O: LED1 sits between PB0 and PB1. Drive it forward to flash;", 25.4, 88.9),
-        text("reverse-bias it and time the discharge on PB1 to sense light. Program U1 off-board (socketed).", 25.4, 93.98),
-        text("Fuses: 128 kHz or 1.2 MHz clock, BOD 1.8 V (disable in sleep).", 25.4, 99.06),
-    ]
+    notes = [text(s, x, y, size) for (s, x, y, size) in D.NOTES]
     items += notes
 
     lib_block = ["lib_symbols"] + [defs[k] for k in lib_ids]
     doc = ["kicad_sch", ["version", 20230121], ["generator", Sym("eeschema")],
            ["uuid", ROOT], ["paper", "A4"],
-           ["title_block", ["title", "Firefly solar light board"], ["date", "2026-11-22"],
-            ["rev", "0.1"], ["company", "winfrees/firefly"],
-            ["comment", 1, "ATtiny13A, 1 F supercap, LED flash + sense"]],
+           ["title_block", ["title", D.TITLE], ["date", D.DATE], ["rev", D.REV], ["company", "winfrees/firefly"], ["comment", 1, D.COMMENT]],
            lib_block] + items + [["sheet_instances", ["path", "/", ["page", "1"]]]]
     open(out, "w").write(dump(doc) + "\n")
     import json, os
-    json.dump({"root": ROOT, "symbols": SYM_UUIDS}, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sym_uuids.json"), "w"), indent=1)
+    json.dump({"root": ROOT, "symbols": SYM_UUIDS}, open(D.UUIDS, "w"), indent=1)
     print("wrote", out, len(items), "items")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(load(sys.argv[1]))

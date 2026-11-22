@@ -5,5 +5,6 @@ fp-info-cache
 _autosave-*
 *.lck
 # generator scratch
-hardware/kicad/scripts/sym_uuids.json
 __pycache__/
+.sym_uuids.json
+logs/
