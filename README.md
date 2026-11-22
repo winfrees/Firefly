@@ -8,7 +8,7 @@ Small, cheap, solar-powered boards that live outdoors and talk to each other wit
 
 ## Status
 
-Rev 0.1 is a draft. The schematic, BOM and a routed 50 × 36 mm two-layer PCB are done, and the board passes DRC. The firmware is not started, and nothing has been built or tested yet.
+Rev 0.1 is a draft. The schematic, BOM, a routed 50 × 36 mm two-layer PCB (passes DRC), an ISP programming jig and the firmware are done. The firmware passes all automated verification (unit tests, exhaustive two-board check, swarm simulation, and the real binary on a simulated ATtiny13A). Nothing has been built yet, so [bench validation](firmware/docs/bench-validation.md) is next.
 
 ## Hardware at a glance
 
@@ -40,7 +40,7 @@ Rev 0.1 is a draft. The schematic, BOM and a routed 50 × 36 mm two-layer PCB ar
 
 - Usable energy, 5.3 V → 1.8 V on 1 F: about 12 J
 - Time to fill in full sun: about 1.5 min
-- Run time flashing every 3 s: about 12 h
+- Run time flashing every 2.5 s: about 10–14 h ([firmware energy budget](firmware/docs/design.md#energy-budget))
 - Run time asleep with no flashing: about 4 days
 
 ## Cost
@@ -58,6 +58,7 @@ About **$3.57 per board** for the parts you buy, or **$4.57** if you also buy th
 | `hardware/schematic.html` | Annotated schematic page with the pin map, energy budget and layout notes |
 | `hardware/bom.csv` | Bill of materials |
 | `hardware/kicad/design.py` | The part, net and placement list both the schematic and board are generated from |
+| `firmware/` | ATtiny13A firmware, tests and docs: [README](firmware/README.md), [design](firmware/docs/design.md), [V&V report](firmware/docs/verification-report.md) |
 | `hardware/isp-jig/` | Programming and power jig for the AVRISP mkII (KiCad project, Gerbers, BOM, how-to) |
 | `tools/kicadgen/` | Scripts that turn a `design.py` into a KiCad schematic and routed board |
 
@@ -87,6 +88,6 @@ Regenerating it: edit `hardware/kicad/design.py` and run the pipeline in [`tools
 
 - [x] KiCad schematic and PCB (50 × 36 mm)
 - [x] ISP programming and power jig for the AVRISP mkII
-- [ ] Firefly sync firmware (MicroCore / avr-gcc)
+- [x] Firefly sync firmware (avr-gcc), with V&V documentation
+- [ ] Bench validation on first boards ([procedure](firmware/docs/bench-validation.md))
 - [ ] Enclosure STL
-- [ ] Bench test of the energy budget

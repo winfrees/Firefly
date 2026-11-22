@@ -50,9 +50,10 @@ A small through-hole board that holds an 8-pin AVR, powers it, and connects it t
 
    ```sh
    avrdude -c avrispmkII -P usb -p t13 -B 8 -U flash:w:firefly.hex:i
+   # or, from firmware/:  make flash
    ```
 
-6. To test the firmware on the jig, fit JP2 and the red LED runs as it would on a firefly board.
+6. To test the firmware on the jig, fit JP2. The jig has no panel or supercap, so set the two sense pins on J4 with resistors: 10 kΩ from pin 2 to pin 8 (supercap OK) and 10 kΩ from pin 7 to pin 4 (night), or to pin 8 (day). The red LED then runs as it would on a firefly board. Without the resistors those pins float and the mode is unpredictable.
 
 **Programming speed.** `-B` sets the programming clock period in microseconds. It has to stay slower than a quarter of the chip's clock:
 

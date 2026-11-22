@@ -8,3 +8,4 @@ _autosave-*
 __pycache__/
 .sym_uuids.json
 logs/
+firmware/build/

@@ -1,0 +1,41 @@
+IT-01 boot + free-running flash at night
+    [pass] 2 boot flashes within 0.25 s (got 26 flashes, gap 0.165 s)
+    [pass] period 2.496..2.496 s, expected 2.496 s (78 ticks x 32 ms)
+    [pass] flash width 15.0..15.0 ms, expected 15 ms
+    [pass] CPU awake 1.053 % of the time at night incl. 15 ms flashes (budget 2 %)
+    [pass] stack low-water 0x97: 8 bytes used, 51 bytes spare
+    (night: awake 1.053 %, 26 flashes in 60 s)
+IT-02 daylight: no flashing
+    [pass] 0 flashes in 59 s of daylight (got 0)
+    [pass] CPU awake 0.0150 % by day, after boot (target < 0.05 %)
+IT-03 dusk: starts flashing
+    [pass] quiet before dusk
+    [pass] first flash 13.90 s after dusk (sim limit: 2 x 8.2 s + one cycle)
+IT-04 dawn: stops flashing
+    [pass] flashing before dawn (6)
+    [pass] no flashes from 1.5 s after dawn (got 0)
+IT-05 low supercap: silent until recovered
+    [pass] no flashes (not even boot) at 2.1 V (got 0)
+    [pass] flashing resumes 12.31 s after cap reaches 3.0 V (sim limit: 2 x 8.2 s + one cycle)
+IT-06 supercap sags at night: stops
+    [pass] no flashes from 1.5 s after the cap falls to 2.2 V (got 0)
+IT-07 hysteresis: 2.5 V boot stays silent
+    [pass] 2.5 V is between 2.3 V and 2.7 V: no flashes after a cold start (got 0)
+IT-08 locks to a neighbour 8 % faster
+    [pass] neighbour every 2.30 s: last 13 flashes all within one tick after it (13 matched, worst 28 ms)
+IT-09 locks to a neighbour 20 % faster
+    [pass] neighbour every 2.00 s: last 15 flashes all within one tick after it (15 matched, worst 27 ms)
+IT-10 light right after own flash is ignored
+    [pass] flash times identical to free-running (10 vs 10 flashes)
+IT-11 steady light (streetlight) does not cause runaway
+    [pass] still flashes at the nominal period under constant light (min 2.496 s)
+IT-12 tap switch: immediate flash, rattles held off
+    [pass] flash 0 ms after tap (limit one tick)
+    [pass] second tap within 1 s ignored (0 flashes)
+IT-13 tap by day: one 'alive' flash
+    [pass] exactly one flash right after the tap, then quiet
+IT-14 two real boards see each other and lock
+    (A first free flash 3.693 s, B 6.175 s)
+    [pass] from 40 s on, every flash of A has one from B within one tick (8/8, worst 14 ms)
+
+23 checks, 0 failures
