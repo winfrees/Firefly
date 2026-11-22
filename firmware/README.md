@@ -39,7 +39,13 @@ make check    # fails if over the flash/RAM budget
 
 1. Put the chip in the [ISP jig](../hardware/isp-jig/README.md): JP1 at USB, **JP2 removed**.
 2. Plug in USB power, then the mkII. Its LED goes green.
-3. Flash it:
+3. Flash it. A prebuilt image is in `release/firefly-rev0.1.hex` if you'd rather not install the compiler:
+
+   ```sh
+   avrdude -c avrispmkII -P usb -p t13 -B 8 -U flash:w:release/firefly-rev0.1.hex:i
+   ```
+
+   Or build and flash in one step:
 
    ```sh
    make flash    # avrdude -c avrispmkII -P usb -p t13 -B 8 -U flash:w:build/firefly.hex:i
