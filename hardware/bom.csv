@@ -16,8 +16,7 @@ C1,Capacitor,100 nF ceramic,Radial 2.54 mm,1,0.02,,MLCC X7R 50 V,Decoupling at U
 C2,Capacitor,10 uF ceramic,Radial 5 mm,1,0.06,,MLCC X5R 10 V,LED pulse buffer
 "C3,C4",Capacitor,100 nF ceramic,Radial 2.54 mm,2,0.02,,MLCC X7R 50 V,"ADC filter on PB2, PB3"
 SW1,Vibration switch (optional),"Spring, normally open",TH,1,0.05,,SW-18010P,PB4 to GND
-TP1-6,ISP pads (optional),2x3 2.54 mm,Pads,1,0.0,,-,Pogo-pin programming
-J1,Panel connection,2 pads 2.54 mm,Pads,1,0.0,,-,Solder panel wires
+(PV1),Panel pads on PCB,2 pads 2.54 mm,Pads,1,0.0,,-,2-pin 2.54 mm footprint; solder panel leads or a header
 PCB,Circuit board,2-layer ~35x35 mm 1.6 mm,-,1,0.4,,JLCPCB / PCBWay panelized,Shipping dominates small orders
 ENC,Enclosure,PETG or ASA ~15 g,3D print,1,0.3,,Home printed,Not PLA outdoors
 COAT,Weather protection,Conformal coating,-,1,0.05,,Acrylic coat / clear nail polish,Mask LED and socket

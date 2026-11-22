@@ -1,0 +1,9 @@
+# KiCad local/session files
+*.kicad_prl
+*-backups/
+fp-info-cache
+_autosave-*
+*.lck
+# generator scratch
+hardware/kicad/scripts/sym_uuids.json
+__pycache__/

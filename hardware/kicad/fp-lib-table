@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "firefly")(type "KiCad")(uri "${KIPRJMOD}/firefly.pretty")(options "")(descr "Firefly project footprints"))
+)

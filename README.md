@@ -4,13 +4,15 @@ Small, cheap, solar-powered boards that live outdoors and talk to each other wit
 
 **Target:** about $5 per board, with a home 3D-printed case, an ordered PCB, and through-hole assembly at home.
 
-![Schematic](hardware/schematic.png)
+![PCB front](hardware/images/pcb-front.png)
 
 ## Status
 
-Rev 0.1 is a draft. The schematic and BOM are done. The PCB layout and firmware are not started, and nothing has been built or tested yet.
+Rev 0.1 is a draft. The schematic, BOM and a routed 50 × 36 mm two-layer PCB are done, and the board passes DRC. The firmware is not started, and nothing has been built or tested yet.
 
 ## Hardware at a glance
+
+![Schematic](hardware/images/kicad-schematic.png)
 
 | Block | Parts | Notes |
 | --- | --- | --- |
@@ -47,20 +49,41 @@ About **$3.57 per board** for the parts you buy, or **$4.57** if you also buy th
 
 ## Files
 
-- `hardware/schematic.html`: annotated schematic page with the pin map, energy budget and layout notes
-- `hardware/schematic.png`: the schematic as an image
-- `hardware/bom.csv`: bill of materials
+| Path | What it is |
+| --- | --- |
+| `hardware/kicad/` | KiCad 7 project: `firefly.kicad_sch`, `firefly.kicad_pcb`, custom footprint library `firefly.pretty` |
+| `hardware/fab/firefly-rev0.1-gerbers.zip` | Gerbers and drill files, ready to upload to JLCPCB, PCBWay or OSH Park |
+| `hardware/fab/firefly-schematic.pdf` | Printable schematic |
+| `hardware/images/` | Board renders and schematic images |
+| `hardware/schematic.html` | Annotated schematic page with the pin map, energy budget and layout notes |
+| `hardware/bom.csv` | Bill of materials |
+| `hardware/kicad/scripts/` | Python scripts that generated the schematic and board from `design.py` |
 
-## Notes before layout
+## PCB
 
-- Socket U1 and program the chips off-board. The LED sits between MOSI and MISO, which can upset in-circuit programming.
+- 50 × 36 mm, two layers, 1.6 mm FR-4, all through-hole, with two M3 mounting holes
+- 0.4 mm tracks, 0.25 mm clearance, and a ground pour on both sides
+- Autorouted with Freerouting; DRC passes with no errors and no unconnected pads
+- Ordering: upload the Gerber zip and keep the fab's default settings (2 layers, 1.6 mm, HASL)
+
+| Front | Back |
+| --- | --- |
+| ![front](hardware/images/pcb-front.png) | ![back](hardware/images/pcb-back.png) |
+
+Opening it in KiCad: open `hardware/kicad/firefly.kicad_pro`. The footprints use KiCad's stock libraries, plus `firefly.pretty` for the supercap, which the project's `fp-lib-table` points to. The files were made with KiCad 7 and also open in KiCad 8 and 9.
+
+Regenerating it: edit `scripts/design.py`, then run `make_sch.py`, `make_pcb.py`, `route.py` (needs the Freerouting 1.9 jar in `FREEROUTING_JAR`) and `finish.py` with the Python that ships with KiCad.
+
+## Assembly notes
+
+- U1 is socketed and there is no ISP header, so program the chips off-board (breadboard, DIP clip or ZIF adapter). The LED sits between MOSI and MISO and C3 loads SCK, so in-circuit programming would be unreliable anyway.
 - Fuses: 128 kHz or 1.2 MHz clock, BOD at 1.8 V, with BOD disabled during sleep in firmware.
 - The internal 1.1 V reference is only accurate to ±10%, so calibrate ADC thresholds per board or leave margin.
 - Outdoors: use a PETG or ASA case (not PLA), conformal-coat the board, and leave a drain hole under the panel.
 
 ## Roadmap
 
-- [ ] KiCad schematic and PCB (~35×35 mm)
+- [x] KiCad schematic and PCB (50 × 36 mm)
 - [ ] Firefly sync firmware (MicroCore / avr-gcc)
 - [ ] Enclosure STL
 - [ ] Bench test of the energy budget
